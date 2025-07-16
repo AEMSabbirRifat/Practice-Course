@@ -1,54 +1,19 @@
-name: Liascript Automation
-on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Release version (e.g., v1.0.0)'
-        required: true
-        default: 'v1.0.0'
-jobs:
-  run_liascript_automation:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write # This grants permission to create and update releases
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        
-    - name: Install Node.js dependencies
-      run: npm install
-      
-
-        
-    - name: List generated files
-      run: |
-        echo "Generated files:"
-        find dist/ -type f -name "*" | sort
-        
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v2
-      if: ${{ success() }}
-      with:
-        tag_name: ${{ inputs.version }}
-        name: LiaScript Release - ${{ inputs.version }}
-        body: |
-          Automated release of LiaScript content for version ${{ inputs.version }}.
-          
-          **Included files:**
-          - PDF version for reading/printing
-          - SCORM package for LMS integration
-          - IMS package (if generated)
-          
-          Generated from: `Test 01.md`
-        draft: false
-        prerelease: false
-        files: |
-          dist/**/*.pdf
-          dist/**/*.zip
-          dist/**/*.xml
-          dist/**/*
+{
+  "name": "liascript-automation-Test 01",
+  "version": "1.0.0",
+  "description": "Automated Liascript PDF generation for Practice-Course/Test 01.md",
+  "main": "index.js",
+  "scripts": {
+    "generate-pdf": "node scripts/generate-pdf.js"
+  },
+  "keywords": [
+    "liascript",
+    "automation",
+    "pdf"
+  ],
+  "author": "Your Name/Organization",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^22.0.0"
+  }
+}
