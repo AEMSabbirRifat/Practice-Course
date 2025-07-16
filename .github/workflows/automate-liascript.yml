@@ -1,0 +1,66 @@
+name: Build LiaScript to SCORM
+
+on:
+  push:
+    branches:
+      - main # Or your default branch, e.g., master
+    paths:
+      - 'Test 01.md' # Trigger only when Test 01.md changes
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  build_scorm:
+    runs-on: ubuntu-latest # You can choose other runners like windows-latest or macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18' # Or a version compatible with the LiaScript Exporter
+
+    - name: Install LiaScript Exporter (example - adjust as needed)
+      # This is a placeholder. You'll need to replace this with the actual command
+      # to install the LiaScript Exporter.
+      # It could be:
+      # - npm install -g @liascript/exporter
+      # - npm install --prefix . @liascript/exporter
+      # - A direct download and setup if it's a standalone CLI tool
+      run: |
+        echo "Replace this with the actual installation command for LiaScript Exporter."
+        # Example if it's an npm package in your project's package.json:
+        # npm install
+        # Example if it's a global npm package:
+        # npm install -g @liascript/exporter
+
+    - name: Convert LiaScript to SCORM
+      # This is a placeholder. You'll need to replace 'liascript-exporter-command'
+      # with the actual command to run the LiaScript Exporter.
+      # You'll also need to specify the input file (Test 01.md) and potentially
+      # an output directory/filename for the SCORM package.
+      run: |
+        echo "Replace 'liascript-exporter-command' with the actual command and parameters."
+        # Example: liascript-exporter Test\ 01.md --format scorm --output scorm-package.zip
+        # Note: Be careful with spaces in filenames like "Test 01.md" - you might need to quote them.
+        liascript-exporter-command "Test 01.md" --output "liascript_course.zip"
+
+    - name: Upload SCORM package as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: scorm-package
+        path: liascript_course.zip # Adjust this path to where your SCORM package is generated
+
+    - name: Create a release (Optional - for easier distribution)
+      if: github.ref == 'refs/heads/main' # Only create a release on pushes to main
+      uses: softprops/action-gh-release@v2
+      with:
+        files: liascript_course.zip
+        name: SCORM Package - ${{ github.sha }}
+        tag_name: scorm-v${{ github.run_number }}
+        body: |
+          Automated SCORM package build for commit ${{ github.sha }}.
+          [View Course](https://github.com/AEMSabbirRifat/Practice-Course/blob/${{ github.sha }}/Test%2001.md)
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is automatically provided by GitHub Actions
