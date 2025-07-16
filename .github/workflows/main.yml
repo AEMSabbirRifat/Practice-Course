@@ -1,5 +1,4 @@
 name: Liascript Automation
-
 on:
   workflow_dispatch:
     inputs:
@@ -7,37 +6,71 @@ on:
         description: 'Release version (e.g., v1.0.0)'
         required: true
         default: 'v1.0.0'
-
 jobs:
   run_liascript_automation:
     runs-on: ubuntu-latest
     permissions:
       contents: write # This grants permission to create and update releases
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
+      
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18' # Or your preferred Node.js version
-
+        node-version: '18'
+        
     - name: Install Node.js dependencies
       run: npm install
-
-    - name: Generate Liascript PDF
-      run: npm run generate-pdf # This runs your script/generate-pdf.js
-
+      
+    - name: Install LiaScript globally
+      run: npm install -g @liascript/devserver
+      
+    - name: Create output directories
+      run: |
+        mkdir -p dist/pdf
+        mkdir -p dist/scorm
+        
+    - name: Generate LiaScript PDF
+      run: |
+        if npm run | grep -q "generate-pdf"; then
+          npm run generate-pdf
+        else
+          liascript --format pdf --output dist/pdf "Test 01.md"
+        fi
+        
+    - name: Generate LiaScript SCORM
+      run: |
+        if npm run | grep -q "generate-scorm"; then
+          npm run generate-scorm
+        else
+          liascript --format scorm --output dist/scorm "Test 01.md"
+        fi
+        
+    - name: List generated files
+      run: |
+        echo "Generated files:"
+        find dist/ -type f -name "*" | sort
+        
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
-      if: ${{ success() }} # Only create a release if the generation step succeeded
+      if: ${{ success() }}
       with:
         tag_name: ${{ inputs.version }}
-        name: Liascript Release - ${{ inputs.version }}
+        name: LiaScript Release - ${{ inputs.version }}
         body: |
-          Automated release of Liascript content for version ${{ inputs.version }}.
-          Includes generated PDF from `Test 01.md`.
+          Automated release of LiaScript content for version ${{ inputs.version }}.
+          
+          **Included files:**
+          - PDF version for reading/printing
+          - SCORM package for LMS integration
+          - IMS package (if generated)
+          
+          Generated from: `Test 01.md`
         draft: false
         prerelease: false
-        files: dist/Test 01lesson.pdf # Specify the exact file to upload, or dist/* for all
+        files: |
+          dist/**/*.pdf
+          dist/**/*.zip
+          dist/**/*.xml
+          dist/**/*
