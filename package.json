@@ -6,10 +6,6 @@
   "scripts": {
     "generate-pdf": "node scripts/generate-pdf.js",
     "export-scorm": "liascript-exporter Test\\ 01.md --format scorm --output liascript_course.zip"
-    // ^^^ This line is new or updated ^^^
-    // IMPORTANT: "liascript-exporter" is a hypothetical command.
-    // You MUST replace it with the actual command provided by the LiaScript Exporter.
-    // The path "Test\ 01.md" uses a backslash to escape the space, which is common in shell commands.
   },
   "keywords": [
     "liascript",
@@ -21,8 +17,6 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.19.2",
-    "puppeteer": "^22.12.1",
-    // You might need to add the LiaScript exporter package here if it's an npm package
-    // For example: "liascript-exporter-package": "x.y.z"
+    "puppeteer": "^22.12.1"
   }
 }
