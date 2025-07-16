@@ -1,23 +1,19 @@
 {
-  "name": "liascript-automation-practice-course",
+  "name": "liascript-automation-test 01",
   "version": "1.0.0",
-  "description": "Automated Liascript content generation (PDF, SCORM, IMS) for Practice-Course/Test 01.md",
+  "description": "Automated Liascript PDF generation for test 01.md",
   "main": "index.js",
   "scripts": {
-    "generate-pdf": "node scripts/generate-pdf.js",
-    "generate-scorm": "node scripts/generate-scorm.js",
-    "generate-ims": "node scripts/generate-ims.js"
+    "generate-pdf": "node scripts/generate-pdf.js"
   },
   "keywords": [
     "liascript",
     "automation",
-    "pdf",
-    "scorm",
-    "ims"
+    "pdf"
   ],
   "author": "Your Name/Organization",
   "license": "MIT",
   "dependencies": {
-    "liascript": "^0.1.0" 
+    "puppeteer": "^22.0.0"
   }
 }
