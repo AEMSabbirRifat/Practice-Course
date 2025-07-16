@@ -18,6 +18,6 @@
   "author": "Your Name/Organization",
   "license": "MIT",
   "dependencies": {
-    "liascript": "^latest_version_here"
+    "liascript": "^0.1.0"  // <<<--- THIS LINE HAS BEEN FIXED!
   }
 }
