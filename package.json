@@ -5,7 +5,14 @@
   "main": "scripts/generate-pdf.js",
   "scripts": {
     "generate-pdf": "node scripts/generate-pdf.js",
-    "export-scorm": "liascript-exporter Test\\ 01.md --format scorm --output liascript_course.zip"
+    "export-scorm": "npx @liascript/exporter Test\\ 01.md --format scorm --output liascript_course.zip"
+    // ^^^ IMPORTANT: You MUST replace "npx @liascript/exporter"
+    // with the actual command to run the LiaScript SCORM exporter.
+    // Common possibilities:
+    // 1. If it's an npm package like "@liascript/exporter": "npx @liascript/exporter"
+    // 2. If it's a global CLI tool (after npm install -g <tool-name>): "liascript-cli-name"
+    // 3. If it's a local script: "node path/to/exporter.js"
+    // Refer to LiaScript's official documentation for the correct command.
   },
   "keywords": [
     "liascript",
@@ -18,5 +25,9 @@
   "dependencies": {
     "express": "^4.19.2",
     "puppeteer": "^22.12.1"
+    // ^^^ IMPORTANT: If the LiaScript SCORM exporter is an npm package,
+    // you MUST add it here. For example:
+    // "@liascript/exporter": "latest"
+    // (Replace "@liascript/exporter" with the actual package name if different)
   }
 }
