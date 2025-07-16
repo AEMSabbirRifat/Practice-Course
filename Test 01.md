@@ -1,6 +1,6 @@
 # 🎉 My Practice Course
 
-## 👋 Welcome
+## 🎯 Introduction
 Hello! This is my first GitHub-hosted course.
 
 ### 🌟 What You'll Learn
