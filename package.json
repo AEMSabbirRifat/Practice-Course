@@ -1,8 +1,7 @@
-Code:
 {
   "name": "liascript-automation-Test 01",
   "version": "1.0.0",
-  "description": "Automated Liascript PDF generation for Practice-Course/Test 01.md",
+  "description": "Automated Liascript PDF generation for Test 01.md",
   "main": "index.js",
   "scripts": {
     "generate-pdf": "node scripts/generate-pdf.js"
