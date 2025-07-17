@@ -1,4 +1,3 @@
-Code:
 // scripts/generate-pdf.js
 const puppeteer = require('puppeteer');
 const path = require('path');
@@ -7,7 +6,7 @@ const fs = require('fs');
 async function generatePdf() {
   const liascriptFile = 'Test 01.md'; // <<<--- IMPORTANT: UPDATED TO Test 01.md
   const outputDir = 'dist';
-  const outputPdf = path.join(outputDir, 'Test 01 lesson.pdf'); // Also update output filename
+  const outputPdf = path.join(outputDir, 'Test 01lesson.pdf'); // Also update output filename
 
   console.log('Starting PDF generation script...');
 
