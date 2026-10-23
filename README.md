@@ -24,7 +24,7 @@ This is the sandbox where I first learned to publish courses with [LiaScript](ht
 
 ## 🔧 2026 update
 
-I replaced the original export script, which printed raw Markdown, with the official LiaScript exporter. I also added a proper course header, fixed the quiz syntax and added a `.gitignore`. For real lessons built with this pipeline, see [automation-test-1](https://github.com/AEMSabbirRifat/automation-test-1) and [QuRM-WiSe2024-25](https://github.com/AEMSabbirRifat/QuRM-WiSe2024-25).
+I replaced the original export script, which printed raw Markdown, with the official LiaScript exporter. I also added a proper course header, fixed the quiz syntax and added a `.gitignore`. For real lessons built with this pipeline, see [liascript-export-week02](https://github.com/AEMSabbirRifat/liascript-export-week02) and [QuRM-WiSe2024-25](https://github.com/AEMSabbirRifat/QuRM-WiSe2024-25).
 
 ---
 
