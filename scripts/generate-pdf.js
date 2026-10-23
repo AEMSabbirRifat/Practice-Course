@@ -1,75 +1,50 @@
 // scripts/generate-pdf.js
-const puppeteer = require('puppeteer');
-const path = require('path');
+//
+// Exports the LiaScript lesson named in package.json ("liascript.lesson") with the
+// official LiaScript exporter (@liascript/exporter):
+//   - dist/<slug>.pdf          printable handout, rendered the way students see the course
+//   - dist/<slug>-scorm.zip    SCORM 1.2 package for Moodle / ILIAS / OPAL
+//
+// The previous version opened the raw .md file in a headless browser, which printed
+// the Markdown source instead of the rendered course. The exporter renders it properly.
+//
+// Usage:  npm install && npm run generate-pdf            (PDF + SCORM)
+//         npm run generate-pdf -- --pdf-only             (PDF only)
+
+const { execFileSync } = require('child_process');
 const fs = require('fs');
+const path = require('path');
 
-async function generatePdf() {
-  const liascriptFile = 'Test 01.md'; // <<<--- IMPORTANT: UPDATED TO Test 01.md
-  const outputDir = 'dist';
-  const outputPdf = path.join(outputDir, 'Test 01lesson.pdf'); // Also update output filename
+const root = path.join(__dirname, '..');
+const { lesson, slug, organization } = require(path.join(root, 'package.json')).liascript;
+const outDir = path.join(root, 'dist');
+const isWindows = process.platform === 'win32';
+const liaex = path.join(root, 'node_modules', '.bin', isWindows ? 'liaex.cmd' : 'liaex');
 
-  console.log('Starting PDF generation script...');
-
-  // Ensure output directory exists
-  if (!fs.existsSync(outputDir)) {
-    console.log(`Creating output directory: ${outputDir}`);
-    fs.mkdirSync(outputDir, { recursive: true });
-  } else {
-    console.log(`Output directory already exists: ${outputDir}`);
-  }
-
-  // Path to your Liascript file relative to the project root
-  const liascriptPath = `file://${path.resolve(liascriptFile)}`;
-  console.log(`Liascript file path resolved to: ${liascriptPath}`);
-
-  try {
-    // Launch a headless browser
-    console.log('Launching Puppeteer browser...');
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'] // Required for GitHub Actions
-    });
-    console.log('Browser launched successfully.');
-
-    const page = await browser.newPage();
-    console.log('New page created.');
-
-    // Navigate to your Liascript file
-    console.log(`Navigating to: ${liascriptPath}`);
-    await page.goto(liascriptPath, { waitUntil: 'networkidle0', timeout: 60000 });
-    console.log('Page navigated successfully.');
-
-    // Optional: Wait for Liascript to fully render.
-    console.log('Waiting for Liascript content to settle (2 seconds)...');
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    console.log('Content settled.');
-
-    // Generate PDF
-    console.log(`Generating PDF to: ${outputPdf}`);
-    await page.pdf({
-      path: outputPdf,
-      format: 'A4',
-      printBackground: true,
-      margin: {
-        top: '20mm',
-        right: '20mm',
-        bottom: '20mm',
-        left: '20mm',
-      }
-    });
-    console.log('PDF generation complete.');
-
-    await browser.close();
-    console.log('Browser closed.');
-    console.log(`PDF generated at: ${outputPdf}`);
-
-  } catch (error) {
-    console.error('An error occurred during PDF generation:', error);
-    process.exit(1);
-  }
+function run(args) {
+  console.log(`> liaex ${args.join(' ')}`);
+  execFileSync(liaex, args, { stdio: 'inherit', cwd: root, shell: isWindows });
 }
 
-generatePdf().catch(error => {
-  console.error('Unhandled error in generatePdf function:', error);
+if (!fs.existsSync(path.join(root, lesson))) {
+  console.error(`Lesson file not found: ${lesson}`);
   process.exit(1);
-});
+}
+fs.mkdirSync(outDir, { recursive: true });
+
+try {
+  run(['-i', lesson, '-f', 'pdf', '-o', path.join('dist', slug), '--pdf-timeout', '30000']);
+  if (!process.argv.includes('--pdf-only')) {
+    try {
+      run(['-i', lesson, '-f', 'scorm1.2', '-o', path.join('dist', `${slug}-scorm`),
+           '--scorm-organization', organization]);
+    } catch (err) {
+      // The PDF is the main deliverable; a SCORM hiccup should not block the release.
+      console.warn('SCORM export failed, continuing with the PDF only:', err.message);
+    }
+  }
+  console.log(`Done. Files are in ${outDir}`);
+} catch (err) {
+  console.error('Export failed:', err.message);
+  process.exit(1);
+}
