@@ -1,19 +1,27 @@
 {
-  "name": "liascript-automation-Test 01",
+  "name": "practice-course",
   "version": "1.0.0",
-  "description": "Automated Liascript PDF generation for Test 01.md",
-  "main": "index.js",
+  "private": true,
+  "description": "A sandbox LiaScript course with an automated PDF/SCORM export pipeline",
   "scripts": {
     "generate-pdf": "node scripts/generate-pdf.js"
   },
+  "liascript": {
+    "lesson": "Test 01.md",
+    "slug": "practice-course",
+    "organization": "Otto von Guericke University Magdeburg"
+  },
   "keywords": [
     "liascript",
+    "open-educational-resources",
+    "scorm",
+    "pdf",
     "automation",
-    "pdf"
+    "github-actions"
   ],
-  "author": "Your Name/Organization",
+  "author": "A E M Sabbir Rifat <a.e.m.sabbirrifat@gmail.com>",
   "license": "MIT",
-  "dependencies": {
-    "puppeteer": "^22.0.0"
+  "devDependencies": {
+    "@liascript/exporter": "3.4.2--2.1.0"
   }
 }

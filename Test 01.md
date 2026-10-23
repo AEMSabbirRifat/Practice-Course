@@ -1,3 +1,13 @@
+<!--
+author:   A E M Sabbir Rifat
+email:    a.e.m.sabbirrifat@gmail.com
+version:  1.0.0
+language: en
+narrator: US English Female
+comment:  Practice course used to test publishing a LiaScript course on GitHub
+          and exporting it automatically to PDF and SCORM.
+-->
+
 # 🎉 My Practice Course
 
 ## 🎯 Introduction
@@ -11,7 +21,7 @@ Hello! This is my first GitHub-hosted course.
 ## 🧠 Quiz Time
 What platform are we using for hosting?
 
-[(x)] GitHub
+[(X)] GitHub
 [( )] Facebook
 [( )] WhatsApp
 ***
